@@ -1,62 +1,94 @@
-### 14.2_service_accounts
+## Задача 1: Работа с сервис-аккаунтами через утилиту kubectl в установленном minikube
 
-## Задача 1: Работа с модулем Vault
+Выполните приведённые команды в консоли. Получите вывод команд. Сохраните
+задачу 1 как справочный материал.
 
-Запустить модуль Vault конфигураций через утилиту kubectl в установленном minikube
-
-```
-kubectl apply -f 14.2/vault-pod.yml
-```
-
-Получить значение внутреннего IP пода
+### Как создать сервис-аккаунт?
 
 ```
-kubectl get pod 14.2-netology-vault -o json | jq -c '.status.podIPs'
+kubectl create serviceaccount netology
 ```
 
-Примечание: jq - утилита для работы с JSON в командной строке
+### Как просмотреть список сервис-акаунтов?
 
-Запустить второй модуль для использования в качестве клиента
+```
+kubectl get serviceaccounts
+kubectl get serviceaccount
+```
+
+### Как получить информацию в формате YAML и/или JSON?
+
+```
+kubectl get serviceaccount netology -o yaml
+kubectl get serviceaccount default -o json
+```
+
+### Как выгрузить сервис-акаунты и сохранить его в файл?
+
+```
+kubectl get serviceaccounts -o json > serviceaccounts.json
+kubectl get serviceaccount netology -o yaml > netology.yml
+```
+
+### Как удалить сервис-акаунт?
+
+```
+kubectl delete serviceaccount netology
+```
+
+### Как загрузить сервис-акаунт из файла?
+
+```
+kubectl apply -f netology.yml
+```
+
+## Задача 2 (*): Работа с сервис-акаунтами внутри модуля
+
+Выбрать любимый образ контейнера, подключить сервис-акаунты и проверить
+доступность API Kubernetes
 
 ```
 kubectl run -i --tty fedora --image=fedora --restart=Never -- sh
 ```
 
-Установить дополнительные пакеты
+Просмотреть переменные среды
 
 ```
-dnf -y install pip
-pip install hvac
+env | grep KUBE
 ```
 
-Запустить интепретатор Python и выполнить следующий код, предварительно
-поменяв IP и токен
+Получить значения переменных
 
 ```
-import hvac
-client = hvac.Client(
-    url='http://10.10.133.71:8200',
-    token='aiphohTaa0eeHei'
-)
-client.is_authenticated()
-
-# Пишем секрет
-client.secrets.kv.v2.create_or_update_secret(
-    path='hvac',
-    secret=dict(netology='Big secret!!!'),
-)
-
-# Читаем секрет
-client.secrets.kv.v2.read_secret_version(
-    path='hvac',
-)
+K8S=https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT
+SADIR=/var/run/secrets/kubernetes.io/serviceaccount
+TOKEN=$(cat $SADIR/token)
+CACERT=$SADIR/ca.crt
+NAMESPACE=$(cat $SADIR/namespace)
 ```
 
-## Задача 2 (*): Работа с секретами внутри модуля
+Подключаемся к API
 
-* На основе образа fedora создать модуль;
-* Создать секрет, в котором будет указан токен;
-* Подключить секрет к модулю;
-* Запустить модуль и проверить доступность сервиса Vault.
+```
+curl -H "Authorization: Bearer $TOKEN" --cacert $CACERT $K8S/api/v1/
+```
+
+В случае с minikube может быть другой адрес и порт, который можно взять здесь
+
+```
+cat ~/.kube/config
+```
+
+или здесь
+
+```
+kubectl cluster-info
+```
 
 ---
+
+### Как оформить ДЗ?
+
+Выполненное домашнее задание пришлите ссылкой на .md-файл в вашем репозитории.
+
+В качестве решения прикрепите к ДЗ конфиг файлы для деплоя. Прикрепите скриншоты вывода команды kubectl со списком запущенных объектов каждого типа (pods, deployments, serviceaccounts) или скриншот из самого Kubernetes, что сервисы подняты и работают, а также вывод из CLI.
