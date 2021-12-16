@@ -78,27 +78,23 @@ cat ~/.kube/config
 kubectl cluster-info
 ```
 ---
-### Создание serviceaccount с правами просмотра: </br>
-Создать Serviceaccount для прав просмотра: </br>
+#### Создание serviceaccount с правами просмотра: </br>
 `kubectl -n kube-system create serviceaccount netology-user` </br>
-Binding netology-user на view: </br>
 `kubectl -n kube-system create clusterrolebinding netology-log-viewer --clusterrole=view --serviceaccount=kube-system:netology-user`</br>
-Токен в переменную: </br>
 `export USERNETTOKEN=$(kubectl -n kube-system get serviceaccount/netology-user -o jsonpath='{.secrets[0].name}')`</br> 
-Decode USER: </br>
-`export USERTOKEN=$(kubectl get secret $USERNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
-ТЕСТ: </br>
-`curl -k -H "Authorization: Bearer $USERTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br>
+`export USERTOKEN=$(kubectl -n kube-system get secret $USERNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
+`curl -k -H "Authorization: Bearer $USERTOKEN" -X GET "https://k8s-master1:6443/api/v1/pods" | jq` </br>
+Просмотр api/v1/pods возможен. а просмотр secrets и nodes - заблокироыван</br>
+![](https://github.com/murzinvit/screen_1/blob/e80cda666421d88e0d6e55853094a396adf3e1bb/Kuber_user_token_forbidden.jpg) </br>
 
-### Создание serviceaccount с правами админа: </br>
-Создать Serviceaccount для прав админа: </br>
-`kubectl create serviceaccount netology-admin`</br>
-Binding netology-admin на cluster-admin: </br>
-`kubectl create clusterrolebinding netology-admin --clusterrole=cluster-admin --serviceaccount=kube-system:netology-adm`</br>
-Токен в переменную: </br>
-`export ADMNETTOKEN=$(kubectl get serviceaccount/netology-admin -o jsonpath='{.secrets[0].name}')`</br>
-Decode ADM: </br>
-`export ADMTOKEN=$(kubectl get secret $ADMNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br>
+
+#### Создание serviceaccount с правами админа: </br>
+`kubectl -n kube-system create serviceaccount netology-admin`</br>
+`kubectl -n kube-system create clusterrolebinding netology-admin-bind --clusterrole=cluster-admin --serviceaccount=kube-system:netology-admin`</br>
+`export ADMNETTOKEN=$(kubectl -n kube-system get serviceaccount/netology-admin -o jsonpath='{.secrets[0].name}')`</br>
+`export ADMTOKEN=$(kubectl -n kube-system get secret $ADMNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br>
+`curl -k -H "Authorization: Bearer $ADMTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br>
+![](https://github.com/murzinvit/screen_1/blob/4dda07586a574f51f532bf4010deda6b34f55eeb/Kuber_get_from_adm_account_ok.jpg) </br>
 
 ---
 
