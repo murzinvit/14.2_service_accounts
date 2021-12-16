@@ -53,6 +53,7 @@ kubectl run -i --tty fedora --image=fedora --restart=Never -- sh
 ```
 env | grep KUBE
 ```
+![](https://github.com/murzinvit/screen_1/blob/cf4ee3ce9a05f67c7575dced4151381291a3eff9/Kuber_get_env_in_fedora.jpg) </br>
 
 Получить значения переменных
 ```
