@@ -79,6 +79,9 @@ cat ~/.kube/config
 kubectl cluster-info
 ```
 ---
+User Accounts – профили обычных пользователей, используемые для доступа к клатеру снаружи кластера </br> 
+Service Accounts используются для аутентификации сервисов внутри кластера  </br>
+
 #### Создание serviceaccount с правами просмотра: </br>
 `kubectl -n kube-system create serviceaccount netology-user` </br>
 `kubectl -n kube-system create clusterrolebinding netology-log-viewer --clusterrole=view --serviceaccount=kube-system:netology-user`</br>
