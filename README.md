@@ -45,19 +45,16 @@ kubectl apply -f netology.yml
 
 Выбрать любимый образ контейнера, подключить сервис-акаунты и проверить
 доступность API Kubernetes
-
 ```
 kubectl run -i --tty fedora --image=fedora --restart=Never -- sh
 ```
 
 Просмотреть переменные среды
-
 ```
 env | grep KUBE
 ```
 
 Получить значения переменных
-
 ```
 K8S=https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT
 SADIR=/var/run/secrets/kubernetes.io/serviceaccount
@@ -67,27 +64,39 @@ NAMESPACE=$(cat $SADIR/namespace)
 ```
 
 Подключаемся к API
-
 ```
 curl -H "Authorization: Bearer $TOKEN" --cacert $CACERT $K8S/api/v1/
 ```
 
 В случае с minikube может быть другой адрес и порт, который можно взять здесь
-
 ```
 cat ~/.kube/config
 ```
 
 или здесь
-
 ```
 kubectl cluster-info
 ```
+---
+### Создание serviceaccount с правами просмотра: </br>
+Создать Serviceaccount для прав просмотра:`kubectl -n kube-system create serviceaccount netology-user`</br>
+Binding netology-user на view:`kubectl -n kube-system create clusterrolebinding netology-log-viewer --clusterrole=view --serviceaccount=kube-system:netology-user`</br>
+Токен в переменную:`export USERNETTOKEN=$(kubectl -n kube-system get serviceaccount/netology-user -o jsonpath='{.secrets[0].name}')`</br> 
+Decode USER: `export USERTOKEN=$(kubectl get secret $USERNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
+ТЕСТ: `curl -k -H "Authorization: Bearer $USERTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br>
+
+### Создание serviceaccount с правами админа: </br>
+Создать Serviceaccount для прав админа:`kubectl create serviceaccount netology-admin`</br>
+Binding netology-admin на cluster-admin:`kubectl create clusterrolebinding netology-admin --clusterrole=cluster-admin --serviceaccount=kube-system:netology-adm`</br>
+Токен в переменную:`export ADMNETTOKEN=$(kubectl get serviceaccount/netology-admin -o jsonpath='{.secrets[0].name}')`</br>
+Decode ADM: `export ADMTOKEN=$(kubectl get secret $ADMNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br>
 
 ---
 
-### Как оформить ДЗ?
+### work notes:
 
-Выполненное домашнее задание пришлите ссылкой на .md-файл в вашем репозитории.
-
-В качестве решения прикрепите к ДЗ конфиг файлы для деплоя. Прикрепите скриншоты вывода команды kubectl со списком запущенных объектов каждого типа (pods, deployments, serviceaccounts) или скриншот из самого Kubernetes, что сервисы подняты и работают, а также вывод из CLI.
+`kubectl -n kube-system create serviceaccount adm-user`</br> 
+`kubectl create clusterrolebinding adm-user-bind --clusterrole=cluster-admin --serviceaccount=kube-system:adm-user` </br> 
+`export ADMUSERTOKEN=$(kubectl -n kube-system get serviceaccount/adm-user -o jsonpath='{.secrets[0].name}')` </br> 
+`export ADMTOKEN=$(kubectl -n kube-system get secret $ADMUSERTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
+`curl -k -H "Authorization: Bearer $ADMTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br> 
