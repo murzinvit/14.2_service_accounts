@@ -79,17 +79,26 @@ kubectl cluster-info
 ```
 ---
 ### Создание serviceaccount с правами просмотра: </br>
-Создать Serviceaccount для прав просмотра:`kubectl -n kube-system create serviceaccount netology-user`</br>
-Binding netology-user на view:`kubectl -n kube-system create clusterrolebinding netology-log-viewer --clusterrole=view --serviceaccount=kube-system:netology-user`</br>
-Токен в переменную:`export USERNETTOKEN=$(kubectl -n kube-system get serviceaccount/netology-user -o jsonpath='{.secrets[0].name}')`</br> 
-Decode USER: `export USERTOKEN=$(kubectl get secret $USERNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
-ТЕСТ: `curl -k -H "Authorization: Bearer $USERTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br>
+Создать Serviceaccount для прав просмотра: </br>
+`kubectl -n kube-system create serviceaccount netology-user` </br>
+Binding netology-user на view: </br>
+`kubectl -n kube-system create clusterrolebinding netology-log-viewer --clusterrole=view --serviceaccount=kube-system:netology-user`</br>
+Токен в переменную: </br>
+`export USERNETTOKEN=$(kubectl -n kube-system get serviceaccount/netology-user -o jsonpath='{.secrets[0].name}')`</br> 
+Decode USER: </br>
+`export USERTOKEN=$(kubectl get secret $USERNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
+ТЕСТ: </br>
+`curl -k -H "Authorization: Bearer $USERTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br>
 
 ### Создание serviceaccount с правами админа: </br>
-Создать Serviceaccount для прав админа:`kubectl create serviceaccount netology-admin`</br>
-Binding netology-admin на cluster-admin:`kubectl create clusterrolebinding netology-admin --clusterrole=cluster-admin --serviceaccount=kube-system:netology-adm`</br>
-Токен в переменную:`export ADMNETTOKEN=$(kubectl get serviceaccount/netology-admin -o jsonpath='{.secrets[0].name}')`</br>
-Decode ADM: `export ADMTOKEN=$(kubectl get secret $ADMNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br>
+Создать Serviceaccount для прав админа: </br>
+`kubectl create serviceaccount netology-admin`</br>
+Binding netology-admin на cluster-admin: </br>
+`kubectl create clusterrolebinding netology-admin --clusterrole=cluster-admin --serviceaccount=kube-system:netology-adm`</br>
+Токен в переменную: </br>
+`export ADMNETTOKEN=$(kubectl get serviceaccount/netology-admin -o jsonpath='{.secrets[0].name}')`</br>
+Decode ADM: </br>
+`export ADMTOKEN=$(kubectl get secret $ADMNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br>
 
 ---
 
