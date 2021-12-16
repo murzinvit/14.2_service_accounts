@@ -99,10 +99,3 @@ kubectl cluster-info
 
 ---
 
-### work notes:
-
-`kubectl -n kube-system create serviceaccount adm-user`</br> 
-`kubectl create clusterrolebinding adm-user-bind --clusterrole=cluster-admin --serviceaccount=kube-system:adm-user` </br> 
-`export ADMUSERTOKEN=$(kubectl -n kube-system get serviceaccount/adm-user -o jsonpath='{.secrets[0].name}')` </br> 
-`export ADMTOKEN=$(kubectl -n kube-system get secret $ADMUSERTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
-`curl -k -H "Authorization: Bearer $ADMTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br> 
