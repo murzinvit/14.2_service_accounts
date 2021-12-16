@@ -80,7 +80,7 @@ kubectl cluster-info
 ```
 ---
 User Accounts – профили обычных пользователей, используемые для доступа к клатеру снаружи кластера </br> 
-Service Accounts используются для аутентификации сервисов внутри кластера  </br>
+Service Accounts - используются для аутентификации сервисов внутри кластера </br>
 
 #### Создание serviceaccount с правами просмотра: </br>
 `kubectl -n kube-system create serviceaccount netology-user` </br>
@@ -101,4 +101,6 @@ Service Accounts используются для аутентификации с
 ![](https://github.com/murzinvit/screen_1/blob/4dda07586a574f51f532bf4010deda6b34f55eeb/Kuber_get_from_adm_account_ok.jpg) </br>
 
 ---
+work notes: </br>
+https://rtfm.co.ua/kubernetes-serviceaccounts-jwt-tokeny-autentifikaciya-i-rbac-avtorizaciya/ </br>
 
