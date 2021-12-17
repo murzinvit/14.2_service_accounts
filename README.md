@@ -48,12 +48,13 @@ kubectl apply -f netology.yml
 ```
 kubectl run -i --tty fedora --image=fedora --restart=Never -- sh
 ```
+[nginx-pod.yaml](https://github.com/murzinvit/14.4_service_accounts/blob/5ca3dbc3ce25fe70cdbc27361af32729b96ed6b8/nginx-pod.yaml)</br>
 
 Просмотреть переменные среды
 ```
 env | grep KUBE
 ```
-![](https://github.com/murzinvit/screen_1/blob/cf4ee3ce9a05f67c7575dced4151381291a3eff9/Kuber_get_env_in_fedora.jpg) </br>
+![](https://github.com/murzinvit/screen_1/blob/cf5da4468f1e3c58523a979f0bbd222ecef2bc67/Kube_get_env_nginx_pod.jpg) </br>
 
 Получить значения переменных
 ```
