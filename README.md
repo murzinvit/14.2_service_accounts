@@ -108,3 +108,4 @@ Service Accounts - используются для аутентификации 
 work notes: </br>
 https://rtfm.co.ua/kubernetes-serviceaccounts-jwt-tokeny-autentifikaciya-i-rbac-avtorizaciya/ </br>
 https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ </br>
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/ </br>
