@@ -1,0 +1,18 @@
+kubectl apply -f - <<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pod
+  labels:
+    name: nginx-pod-lbl
+spec:
+  serviceAccountName: netology-admin
+  automountServiceAccountToken: false
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - name: nginx
+      containerPort: 80
+      protocol: TCP
+EOF
