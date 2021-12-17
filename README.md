@@ -89,6 +89,8 @@ Service Accounts - используются для аутентификации 
 `export USERTOKEN=$(kubectl -n kube-system get secret $USERNETTOKEN -o jsonpath='{.data.token}' | base64 --decode)` </br> 
 `curl -k -H "Authorization: Bearer $USERTOKEN" -X GET "https://k8s-master1:6443/api/v1/pods" | jq` </br>
 Просмотр api/v1/pods возможен. а просмотр secrets и nodes - заблокироыван</br>
+![](https://github.com/murzinvit/screen_1/blob/c7be3c7211ac82c9e4d0dcf02e71f4da839b286e/Kuber_get_pod_user_account.png) </br>
+`curl -k -H "Authorization: Bearer $USERTOKEN" -X GET "https://k8s-master1:6443/api/v1/nodes" | jq` </br>
 ![](https://github.com/murzinvit/screen_1/blob/e80cda666421d88e0d6e55853094a396adf3e1bb/Kuber_user_token_forbidden.jpg) </br>
 
 
