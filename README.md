@@ -63,11 +63,13 @@ TOKEN=$(cat $SADIR/token)
 CACERT=$SADIR/ca.crt
 NAMESPACE=$(cat $SADIR/namespace)
 ```
+![](https://github.com/murzinvit/screen_1/blob/68445fdde5075ddfec4308d0337bbe02dc101894/Kuber_export_env_in_pod.jpg) </br>
 
 Подключаемся к API
 ```
 curl -H "Authorization: Bearer $TOKEN" --cacert $CACERT $K8S/api/v1/
 ```
+![](https://github.com/murzinvit/screen_1/blob/126f2e27637f9a14fc5a9df983f23e9e507d3378/Kuber_get_token_inside_pod.jpg) </br>
 
 В случае с minikube может быть другой адрес и порт, который можно взять здесь
 ```
