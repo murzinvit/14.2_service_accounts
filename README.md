@@ -48,7 +48,6 @@ kubectl apply -f netology.yml
 ```
 kubectl run -i --tty fedora --image=fedora --restart=Never -- sh
 ```
-[nginx-pod.yaml](https://github.com/murzinvit/14.4_service_accounts/blob/5ca3dbc3ce25fe70cdbc27361af32729b96ed6b8/nginx-pod.yaml)</br>
 
 Просмотреть переменные среды
 ```
